@@ -1,0 +1,123 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <!-- Указываем кодировку документа, чтобы русский текст отображался корректно. -->
+    <meta charset="UTF-8">
+    <!-- Делаем сайт адаптивным на телефонах, планшетах и компьютерах. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Подставляем заголовок страницы через отдельный блок. -->
+    <title>{% block title %}Django Auth Test{% endblock title %}</title>
+    <!-- Подключаем локальный Bootstrap без CDN. -->
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
+    <!-- Подключаем наш собственный CSS поверх Bootstrap. -->
+    <link rel="stylesheet" href="{% static 'css/site.css' %}">
+</head>
+<body class="bg-body-tertiary d-flex flex-column min-vh-100">
+    <!-- Создаем верхнюю навигационную панель сайта. -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
+        <!-- Ограничиваем ширину содержимого контейнером Bootstrap. -->
+        <div class="container">
+            <!-- Делаем логотип и название сайта ссылкой на главную страницу. -->
+            <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'index' %}">
+                <!-- Встраиваем SVG-иконку щита прямо в HTML, чтобы не подключать отдельную библиотеку иконок. -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M5.072.56C6.157.108 7.052 0 8 0s1.843.108 2.928.56C12.23 1.104 13.757 1.757 15 2c0 3.992-1.063 7.94-3.445 10.547C10.07 14.17 8.583 15.18 8 15.5c-.583-.32-2.07-1.33-3.555-2.953C2.063 9.94 1 5.992 1 2c1.243-.243 2.77-.896 4.072-1.44"/>
+                </svg>
+                <!-- Показываем название проекта рядом с иконкой. -->
+                <span>Auth Test</span>
+            </a>
+
+            <!-- Кнопка-бургер для мобильной версии сайта. -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Переключить навигацию">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Создаем сворачиваемый блок меню. -->
+            <div class="collapse navbar-collapse" id="mainNavbar">
+                <!-- Получаем имя текущего маршрута, чтобы подсвечивать активный пункт меню. -->
+                {% with current=request.resolver_match.url_name %}
+                <!-- Создаем левую часть меню. -->
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <!-- Пункт Главная. -->
+                    <li class="nav-item">
+                        <a class="nav-link {% if current == 'index' %}active active-nav{% endif %}" href="{% url 'index' %}">Главная</a>
+                    </li>
+                    <!-- Пункт Профиль. -->
+                    <li class="nav-item">
+                        <a class="nav-link {% if current == 'profile' %}active active-nav{% endif %}" href="{% url 'profile' %}">Профиль</a>
+                    </li>
+                    <!-- Пункт Пользователи показываем только при наличии нужного permission. -->
+                    {% if perms.main.view_user_directory %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if current == 'user_directory' %}active active-nav{% endif %}" href="{% url 'user_directory' %}">Пользователи</a>
+                    </li>
+                    {% endif %}
+                </ul>
+
+                <!-- Создаем правую часть меню. -->
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                    <!-- Если пользователь авторизован, показываем имя и кнопку выхода. -->
+                    {% if user.is_authenticated %}
+                        <!-- Показываем текущего пользователя. -->
+                        <span class="badge rounded-pill text-bg-light text-dark px-3 py-2">Вошли как: {{ user.username }}</span>
+                        <!-- Делаем logout через POST-форму, потому что стандартный LogoutView работает по POST. -->
+                        <form action="{% url 'logout' %}" method="post" class="d-inline">
+                            <!-- Передаем CSRF-токен для безопасной отправки формы. -->
+                            {% csrf_token %}
+                            <!-- Кнопка выхода. -->
+                            <button type="submit" class="btn btn-outline-light btn-sm">Выйти</button>
+                        </form>
+                    <!-- Если пользователь не авторизован, показываем кнопки входа и регистрации. -->
+                    {% else %}
+                        <!-- Кнопка перехода на страницу входа. -->
+                        <a class="btn btn-outline-light btn-sm" href="{% url 'login' %}">Войти</a>
+                        <!-- Кнопка перехода на страницу регистрации. -->
+                        <a class="btn btn-primary btn-sm" href="{% url 'register' %}">Регистрация</a>
+                    {% endif %}
+                </div>
+                {% endwith %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Создаем основную часть страницы. -->
+    <main class="flex-grow-1 py-4">
+        <!-- Ограничиваем ширину содержимого контейнером Bootstrap. -->
+        <div class="container">
+            <!-- Если есть сообщения Django, показываем их пользователю. -->
+            {% if messages %}
+                <!-- Перебираем все сообщения. -->
+                {% for message in messages %}
+                    <!-- Отрисовываем сообщение как Bootstrap-alert. -->
+                    <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show shadow-sm" role="alert">
+                        <!-- Показываем текст сообщения. -->
+                        {{ message }}
+                        <!-- Добавляем кнопку закрытия сообщения. -->
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Здесь будет контент конкретной страницы. -->
+            {% block content %}{% endblock content %}
+        </div>
+    </main>
+
+    <!-- Создаем нижнюю часть сайта. -->
+    <footer class="border-top bg-white py-4 mt-auto">
+        <!-- Ограничиваем ширину содержимого контейнером Bootstrap. -->
+        <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+            <!-- Пишем краткое описание проекта. -->
+            <p class="mb-0 text-secondary">Учебный проект Django с кастомным пользователем, CSRF-защитой и локальным Bootstrap.</p>
+            <!-- Добавляем маленькую подпись справа. -->
+            <small class="text-secondary">Адаптивно • Современно • Без CDN</small>
+        </div>
+    </footer>
+
+    <!-- Подключаем локальный Bootstrap JavaScript bundle без CDN. -->
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <!-- Подключаем наш собственный JavaScript. -->
+    <script src="{% static 'js/site.js' %}"></script>
+</body>
+</html>

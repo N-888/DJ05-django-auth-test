@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Нет доступа | Auth Test{% endblock title %}
+
+{% block content %}
+<!-- Создаем аккуратную страницу ошибки доступа. -->
+<section class="row justify-content-center text-center">
+    <div class="col-12 col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-4 p-lg-5">
+                <div class="display-4 fw-bold text-danger mb-3">403</div>
+                <h1 class="h2 mb-3">Недостаточно прав для просмотра страницы</h1>
+                <p class="text-secondary mb-4">Скорее всего, ты вошла в систему, но у твоего пользователя нет нужного разрешения или группы для этого раздела.</p>
+                <div class="d-flex justify-content-center gap-2 flex-wrap">
+                    <a href="{% url 'index' %}" class="btn btn-primary">На главную</a>
+                    <a href="{% url 'profile' %}" class="btn btn-outline-secondary">В профиль</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

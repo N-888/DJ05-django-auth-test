@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}Главная | Auth Test{% endblock title %}
+
+{% block content %}
+<!-- Создаем главный приветственный блок страницы. -->
+<section class="hero-card rounded-4 p-4 p-lg-5 mb-4 shadow-sm overflow-hidden position-relative">
+    <!-- Строим адаптивную сетку Bootstrap. -->
+    <div class="row align-items-center g-4">
+        <!-- Левая колонка с основным текстом. -->
+        <div class="col-lg-7">
+            <!-- Добавляем декоративный бейдж. -->
+            <span class="badge rounded-pill text-bg-primary px-3 py-2 mb-3">Django + Custom User + Bootstrap Local</span>
+            <!-- Пишем основной заголовок. -->
+            <h1 class="display-5 fw-bold mb-3">Современная регистрация и вход с локальным Bootstrap</h1>
+            <!-- Поясняем, что уже реализовано в проекте. -->
+            <p class="lead text-secondary mb-4">Здесь уже настроены кастомная модель пользователя, уникальный email, дополнительный телефон, CSRF-защита, права доступа, группы, адаптивный интерфейс и подсветка активного меню.</p>
+            <!-- Создаем блок кнопок. -->
+            <div class="d-flex flex-wrap gap-2">
+                <!-- Если пользователь авторизован, предлагаем открыть профиль. -->
+                {% if user.is_authenticated %}
+                    <a href="{% url 'profile' %}" class="btn btn-primary btn-lg">Открыть профиль</a>
+                <!-- Если пользователь не авторизован, предлагаем регистрацию и вход. -->
+                {% else %}
+                    <a href="{% url 'register' %}" class="btn btn-primary btn-lg">Зарегистрироваться</a>
+                    <a href="{% url 'login' %}" class="btn btn-outline-dark btn-lg">Войти</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Правая колонка с карточкой преимуществ. -->
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-lg rounded-4 h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="feature-icon bg-primary-subtle text-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                                <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1m0-1a8 8 0 1 1 0 16A8 8 0 0 1 8 0"/>
+                                <path d="m10.97 4.97-4.5 4.5-1.44-1.44-.707.707 2.147 2.147a.5.5 0 0 0 .707 0l4.854-4.854z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="h5 mb-1">Безопасность и контроль доступа</h2>
+                            <p class="text-secondary mb-0">Формы защищены CSRF, а разделы можно ограничивать через permissions и группы.</p>
+                        </div>
+                    </div>
+
+                    <ul class="list-group list-group-flush small">
+                        <li class="list-group-item px-0 d-flex justify-content-between"><span>Кастомная модель</span><strong>Да</strong></li>
+                        <li class="list-group-item px-0 d-flex justify-content-between"><span>Уникальный email</span><strong>Да</strong></li>
+                        <li class="list-group-item px-0 d-flex justify-content-between"><span>Телефон</span><strong>Да</strong></li>
+                        <li class="list-group-item px-0 d-flex justify-content-between"><span>Bootstrap локально</span><strong>Да</strong></li>
+                        <li class="list-group-item px-0 d-flex justify-content-between"><span>Активное меню</span><strong>Да</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Создаем блок карточек с преимуществами проекта. -->
+<section class="mb-4">
+    <div class="row g-4">
+        <div class="col-md-6 col-xl-3">
+            <div class="card h-100 border-0 shadow-sm rounded-4">
+                <div class="card-body p-4">
+                    <div class="feature-icon bg-success-subtle text-success mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                            <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1m0-1a8 8 0 1 1 0 16A8 8 0 0 1 8 0"/>
+                            <path d="m10.97 4.97-4.5 4.5-1.44-1.44-.707.707 2.147 2.147a.5.5 0 0 0 .707 0l4.854-4.854z"/>
+                        </svg>
+                    </div>
+                    <h3 class="h5">Кастомный пользователь</h3>
+                    <p class="text-secondary mb-0">Модель <code>CustomUser</code> расширяет стандартный <code>AbstractUser</code> и добавляет новые поля.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-3">
+            <div class="card h-100 border-0 shadow-sm rounded-4">
+                <div class="card-body p-4">
+                    <div class="feature-icon bg-warning-subtle text-warning mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                            <path d="M8 0a5 5 0 0 0-5 5v1.08A2.5 2.5 0 0 0 1.5 8.5v5A2.5 2.5 0 0 0 4 16h8a2.5 2.5 0 0 0 2.5-2.5v-5A2.5 2.5 0 0 0 13 6.08V5a5 5 0 0 0-5-5Zm3 6H5V5a3 3 0 1 1 6 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="h5">CSRF-защита</h3>
+                    <p class="text-secondary mb-0">Все формы отправляются безопасно через POST и содержат CSRF-токен.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-3">
+            <div class="card h-100 border-0 shadow-sm rounded-4">
+                <div class="card-body p-4">
+                    <div class="feature-icon bg-danger-subtle text-danger mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                            <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4.5"/>
+                            <path d="M16 3a1 1 0 0 1-1 1H1a1 1 0 0 1 0-2h4.5l1-1h3l1 1H15a1 1 0 0 1 1 1"/>
+                        </svg>
+                    </div>
+                    <h3 class="h5">Группы и права</h3>
+                    <p class="text-secondary mb-0">Можно выдавать пользователям доступ через группы и custom permission.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-3">
+            <div class="card h-100 border-0 shadow-sm rounded-4">
+                <div class="card-body p-4">
+                    <div class="feature-icon bg-info-subtle text-info mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                            <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1H0z"/>
+                            <path d="M0 6h16v6a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm3 2a1 1 0 0 0 0 2h2a1 1 0 1 0 0-2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="h5">Современный интерфейс</h3>
+                    <p class="text-secondary mb-0">Сайт адаптивный, аккуратный, работает на телефонах и компьютерах и не зависит от CDN.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

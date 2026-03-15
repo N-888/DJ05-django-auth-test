@@ -1,0 +1,84 @@
+/* Создаем базовые CSS-переменные для внешнего вида сайта. */
+:root {
+    /* Определяем радиус скругления карточек и блоков. */
+    --site-radius: 1.25rem;
+    /* Определяем мягкую тень для карточек. */
+    --site-shadow: 0 1rem 2.5rem rgba(15, 23, 42, 0.08);
+}
+
+/* Делаем фон сайта чуть мягче и приятнее. */
+body {
+    background: linear-gradient(180deg, #f8f9fa 0%, #eef2f7 100%);
+}
+
+/* Стилизуем активный пункт меню ярче стандартного Bootstrap. */
+.active-nav {
+    font-weight: 600;
+    position: relative;
+}
+
+/* Рисуем нижнюю линию под активным пунктом меню. */
+.active-nav::after {
+    content: "";
+    position: absolute;
+    left: 0.5rem;
+    right: 0.5rem;
+    bottom: 0.2rem;
+    height: 2px;
+    border-radius: 999px;
+    background-color: currentColor;
+}
+
+/* Оформляем hero-блок главной страницы. */
+.hero-card {
+    background: radial-gradient(circle at top right, rgba(13, 110, 253, 0.16), transparent 28%), #ffffff;
+    border: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+/* Создаем универсальный стиль маленьких блоков под иконки. */
+.feature-icon {
+    width: 3rem;
+    height: 3rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1rem;
+}
+
+/* Делаем карточки мягче и современнее. */
+.card {
+    border-radius: var(--site-radius);
+}
+
+/* Стилизуем строки профиля. */
+.profile-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+/* Подкрашиваем подписи в профиле вторичным цветом. */
+.profile-label {
+    color: #6c757d;
+}
+
+/* Усиливаем визуальный фокус у полей формы. */
+.form-control:focus {
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+}
+
+/* Делаем тени карточек мягче и единообразнее. */
+.shadow-sm,
+.shadow-lg {
+    box-shadow: var(--site-shadow) !important;
+}
+
+/* На очень маленьких экранах переводим элементы профиля в колонку. */
+@media (max-width: 575.98px) {
+    .profile-item {
+        flex-direction: column;
+    }
+}

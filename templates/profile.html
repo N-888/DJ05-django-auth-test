@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Профиль | Auth Test{% endblock title %}
+
+{% block content %}
+<!-- Создаем верхнюю карточку профиля. -->
+<section class="mb-4">
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="card-body p-4 p-lg-5">
+            <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-4">
+                <div>
+                    <span class="badge rounded-pill text-bg-primary px-3 py-2 mb-3">Личный кабинет</span>
+                    <h1 class="display-6 fw-bold mb-2">Привет, {{ user.username }}!</h1>
+                    <p class="text-secondary mb-0">Это защищенная страница профиля. Сюда попадают только авторизованные пользователи.</p>
+                </div>
+                <div class="text-lg-end">
+                    <div class="small text-secondary">Дата регистрации</div>
+                    <div class="fw-semibold">{{ user.date_joined|date:"d.m.Y H:i" }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Создаем блок карточек с данными пользователя. -->
+<section class="row g-4">
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-body p-4">
+                <h2 class="h4 mb-3">Основные данные</h2>
+
+                <div class="profile-item">
+                    <span class="profile-label">Имя пользователя</span>
+                    <strong>{{ user.username }}</strong>
+                </div>
+
+                <div class="profile-item">
+                    <span class="profile-label">Электронная почта</span>
+                    <strong>{{ user.email }}</strong>
+                </div>
+
+                <div class="profile-item">
+                    <span class="profile-label">Номер телефона</span>
+                    <strong>{{ user.phone_number|default:"Не указан" }}</strong>
+                </div>
+
+                <div class="profile-item">
+                    <span class="profile-label">Статус staff</span>
+                    <strong>{% if user.is_staff %}Да{% else %}Нет{% endif %}</strong>
+                </div>
+
+                <div class="profile-item border-bottom-0 pb-0 mb-0">
+                    <span class="profile-label">Суперпользователь</span>
+                    <strong>{% if user.is_superuser %}Да{% else %}Нет{% endif %}</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-body p-4">
+                <h2 class="h4 mb-3">Группы и права</h2>
+
+                <div class="profile-item">
+                    <span class="profile-label">Группы</span>
+                    <strong>
+                        {% for group in user.groups.all %}
+                            {{ group.name }}{% if not forloop.last %}, {% endif %}
+                        {% empty %}
+                            Нет групп
+                        {% endfor %}
+                    </strong>
+                </div>
+
+                <div class="profile-item border-bottom-0 pb-0 mb-0">
+                    <span class="profile-label">Доступ к списку пользователей</span>
+                    <strong>
+                        {% if perms.main.view_user_directory %}
+                            Да, доступ открыт
+                        {% else %}
+                            Нет, нужен permission
+                        {% endif %}
+                    </strong>
+                </div>
+
+                {% if perms.main.view_user_directory %}
+                    <a href="{% url 'user_directory' %}" class="btn btn-outline-primary mt-4">Открыть список пользователей</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

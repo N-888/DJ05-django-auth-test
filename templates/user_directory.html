@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Пользователи | Auth Test{% endblock title %}
+
+{% block content %}
+<!-- Создаем заголовок страницы списка пользователей. -->
+<section class="mb-4">
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+        <div>
+            <h1 class="mb-1">Список пользователей</h1>
+            <p class="text-secondary mb-0">Эта страница доступна только пользователям с permission <code>main.view_user_directory</code>.</p>
+        </div>
+        <a href="{% url 'profile' %}" class="btn btn-outline-secondary">Вернуться в профиль</a>
+    </div>
+</section>
+
+<!-- Создаем таблицу пользователей. -->
+<section>
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Телефон</th>
+                        <th>Дата регистрации</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in users %}
+                        <tr>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.username }}</td>
+                            <td>{{ item.email }}</td>
+                            <td>{{ item.phone_number|default:"—" }}</td>
+                            <td>{{ item.date_joined|date:"d.m.Y H:i" }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center py-4 text-secondary">Пока пользователей нет.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock content %}
